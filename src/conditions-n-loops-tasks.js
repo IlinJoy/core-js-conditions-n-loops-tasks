@@ -315,8 +315,54 @@ function getBalanceIndex(arr) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  if (size <= 0) return [];
+
+  const arr = Array(size);
+  const endPoint = size * size;
+
+  let leftIndex = 0;
+  let topIndex = 0;
+  let rightIndex = size - 1;
+  let bottomIndex = size - 1;
+
+  let value = 1;
+  let arrDim = size;
+
+  while (arrDim) {
+    arr[(arrDim -= 1)] = [];
+  }
+
+  while (value <= endPoint) {
+    for (let i = leftIndex; i <= rightIndex; i += 1) {
+      arr[topIndex][i] = value;
+      value += 1;
+    }
+    topIndex += 1;
+
+    for (let i = topIndex; i <= bottomIndex; i += 1) {
+      arr[i][rightIndex] = value;
+      value += 1;
+    }
+    rightIndex -= 1;
+
+    if (topIndex < bottomIndex) {
+      for (let i = rightIndex; i >= leftIndex; i -= 1) {
+        arr[bottomIndex][i] = value;
+        value += 1;
+      }
+      bottomIndex -= 1;
+    }
+
+    if (leftIndex < rightIndex) {
+      for (let i = bottomIndex; i >= topIndex; i -= 1) {
+        arr[i][leftIndex] = value;
+        value += 1;
+      }
+      leftIndex += 1;
+    }
+  }
+  return arr;
 }
 
 /**
@@ -334,8 +380,27 @@ function getSpiralMatrix(/* size */) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  if (matrix.length < 2) return matrix;
+
+  const temp = Array(matrix.length);
+  const arr = matrix;
+
+  for (let i = 0; i <= matrix.length; i += 1) {
+    temp[i] = [];
+  }
+
+  for (let x = 0; x < matrix.length; x += 1) {
+    for (let y = 0; y < matrix.length; y += 1) {
+      temp[y][matrix.length - 1 - x] = matrix[x][y];
+    }
+  }
+
+  for (let i = 0; i < matrix.length; i += 1) {
+    arr[i] = temp[i];
+  }
+
+  return arr;
 }
 
 /**
@@ -352,8 +417,45 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  if (arr.length < 2) return arr;
+
+  const pivot = arr[0];
+  const less = [];
+  let lessIndex = 0;
+  const greater = [];
+  let greaterIndex = 0;
+
+  for (let i = 1; i < arr.length; i += 1) {
+    if (arr[i] <= pivot) {
+      less[lessIndex] = arr[i];
+      lessIndex += 1;
+    } else {
+      greater[greaterIndex] = arr[i];
+      greaterIndex += 1;
+    }
+  }
+
+  const sortedLess = sortByAsc(less);
+  const sortedGreater = sortByAsc(greater);
+
+  const result = [];
+  let j = 0;
+
+  for (let i = 0; i < sortedLess.length; i += 1) {
+    result[j] = sortedLess[i];
+    j += 1;
+  }
+
+  result[j] = pivot;
+  j += 1;
+
+  for (let i = 0; i < sortedGreater.length; i += 1) {
+    result[j] = sortedGreater[i];
+    j += 1;
+  }
+
+  return result;
 }
 
 /**
