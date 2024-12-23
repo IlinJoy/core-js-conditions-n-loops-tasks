@@ -419,43 +419,40 @@ function rotateMatrix(matrix) {
  */
 function sortByAsc(arr) {
   if (arr.length < 2) return arr;
+  const array = arr;
 
-  const pivot = arr[0];
-  const less = [];
-  let lessIndex = 0;
-  const greater = [];
-  let greaterIndex = 0;
+  function swap(i, index) {
+    const temp = array[i];
+    array[i] = array[index];
+    array[index] = temp;
+  }
 
-  for (let i = 1; i < arr.length; i += 1) {
-    if (arr[i] <= pivot) {
-      less[lessIndex] = arr[i];
-      lessIndex += 1;
-    } else {
-      greater[greaterIndex] = arr[i];
-      greaterIndex += 1;
+  function makePivot(lessIndex, greatIndex) {
+    const target = array[greatIndex];
+    let indexToPaste = lessIndex;
+
+    for (let i = lessIndex; i < greatIndex; i += 1) {
+      if (array[i] < target) {
+        swap(i, indexToPaste);
+        indexToPaste += 1;
+      }
     }
+
+    swap(indexToPaste, greatIndex);
+    return indexToPaste;
   }
 
-  const sortedLess = sortByAsc(less);
-  const sortedGreater = sortByAsc(greater);
-
-  const result = [];
-  let j = 0;
-
-  for (let i = 0; i < sortedLess.length; i += 1) {
-    result[j] = sortedLess[i];
-    j += 1;
+  function sort(less, great) {
+    if (less < great) {
+      const pivot = makePivot(less, great);
+      sort(less, pivot - 1);
+      sort(pivot + 1, great);
+    }
+    return array;
   }
 
-  result[j] = pivot;
-  j += 1;
-
-  for (let i = 0; i < sortedGreater.length; i += 1) {
-    result[j] = sortedGreater[i];
-    j += 1;
-  }
-
-  return result;
+  sort(0, array.length - 1);
+  return array;
 }
 
 /**
@@ -475,8 +472,35 @@ function sortByAsc(arr) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  let actualIter = iterations;
+  if (actualIter <= 0) return str;
+
+  let currentString = str;
+  let j = 0;
+
+  while (actualIter) {
+    let left = '';
+    let right = '';
+
+    for (let i = 0; i < str.length; i += 1) {
+      if (i % 2 === 0) {
+        left += currentString[i];
+      } else {
+        right += currentString[i];
+      }
+    }
+
+    currentString = '';
+    currentString = left + right;
+    j += 1;
+    actualIter -= 1;
+
+    if (str === currentString) {
+      actualIter = iterations % j;
+    }
+  }
+  return currentString;
 }
 
 /**
@@ -496,8 +520,30 @@ function shuffleChar(/* str, iterations */) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  return number;
+  // let numArr = [];
+  // let num = number;
+  // let lastNum = num % 10;
+  // let lessNum = 0;
+  // function swap(i, index){
+  //   const temp = numArr[i];
+  //   numArr[i] = numArr[index];
+  //   numArr[index] = temp;
+  // }
+  // for (let i = 0; i < num; i += 1) {
+  //   num = Math.floor(num / 10);
+  //   const target = num % 10;
+  //   numArr[i] = target;
+  //   if (target < numArr[i - 1]) {
+  //     lessNum = target;
+  //     break;
+  //   }
+  //   numArr[i] = target;
+  // }
+  // while (lessNum > numArr[numArr.length - 1]) {
+  // }
+  // return largerNum;
 }
 
 module.exports = {
